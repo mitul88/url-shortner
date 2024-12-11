@@ -10,7 +10,11 @@ export const setValue = async (key: string, value: string) => {
   return client.set(key, value);
 };
 
-export const getValue = async (key: string, value: string) => {
+export const expireValue = async (key: string, timestamp: number) => {
+  return client.expireAt(key, timestamp);
+};
+
+export const getValue = async (key: string) => {
   return client.get(key);
 };
 
