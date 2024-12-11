@@ -5,6 +5,7 @@ import { urlShortner } from "../utils/url-shortner";
 import { PrismaClient } from "@prisma/client";
 import { ENV_CONFIG } from "../config/env.config";
 import { GetUrlParam } from "../types/request";
+import { expireValue, getValue, setValue } from "../service/redis.service";
 
 const prisma = new PrismaClient();
 
@@ -16,11 +17,22 @@ export const getShortUrl = async (req: Request<GetUrlParam>, res: Response) => {
         hashed: hash,
       },
     });
+
     if (!redirectUrl) {
       res.status(400).send({ message: "url not found" });
       res.end();
       return;
     }
+
+    // save the url in cache if it does not exist in cache
+    const cacheCheck = await getValue(hash);
+    if (!cacheCheck) {
+      await setValue(hash, redirectUrl.url);
+      const timestamp = Date.now();
+      const x = await expireValue(hash, Number(timestamp) + 60);
+      console.log("x", x);
+    }
+
     res.status(302).send({
       message: "url fetched for redirect",
       redirect: redirectUrl?.url,
