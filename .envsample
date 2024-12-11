@@ -1,0 +1,4 @@
+PORT={{YOUR PORT}}
+ENVIORNMENT={{development/production}}
+
+DATABASE_URL={{YOUR DATA BASE URL}}
