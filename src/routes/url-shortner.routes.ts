@@ -3,8 +3,9 @@ import {
   createShortUrl,
   getShortUrl,
 } from "../controller/url-shortner.controller";
+import { checkUrl } from "../middleware/check-url.middleware";
 
 export const router = Router();
 
 router.route("/").get(getShortUrl);
-router.route("/create-short-url").post(createShortUrl);
+router.route("/create-short-url").post([checkUrl], createShortUrl);

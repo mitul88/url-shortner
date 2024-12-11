@@ -5,6 +5,7 @@ import { CreateShortUrlResponse } from "../types/response";
 export const getShortUrl = async (req: Request, res: Response) => {
   res.status(200).send({ message: "short url hit" });
   res.end();
+  return;
 };
 
 export const createShortUrl = async (
@@ -13,4 +14,5 @@ export const createShortUrl = async (
 ) => {
   res.status(201).send({ message: "short url created", shortUrl: "short url" });
   res.end();
+  return;
 };
