@@ -7,5 +7,5 @@ import { checkUrl } from "../middleware/check-url.middleware";
 
 export const router = Router();
 
-router.route("/").get(getShortUrl);
+router.route("/lnk/:hash").get(getShortUrl);
 router.route("/create-short-url").post([checkUrl], createShortUrl);
