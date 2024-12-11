@@ -6,6 +6,7 @@ import { PrismaClient } from "@prisma/client";
 import { ENV_CONFIG } from "../config/env.config";
 import { GetUrlParam } from "../types/request";
 import { expireValue, getValue, setValue } from "../service/redis.service";
+import { CACHE_CONFIG } from "../config/cache.config";
 
 const prisma = new PrismaClient();
 
@@ -28,9 +29,8 @@ export const getShortUrl = async (req: Request<GetUrlParam>, res: Response) => {
     const cacheCheck = await getValue(hash);
     if (!cacheCheck) {
       await setValue(hash, redirectUrl.url);
-      const timestamp = Date.now();
-      const x = await expireValue(hash, Number(timestamp) + 60);
-      console.log("x", x);
+      // cache expires after specific second derived from cache config file
+      await expireValue(hash, CACHE_CONFIG.EXPIRE_IN_SECOND);
     }
 
     res.status(302).send({
